@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#dfe4da;--page:#f2f4ee;--ink:#1d2a33;--muted:#5b6b73;--accent:#1f4e79;--rule:#c3cabd;--mark:#f0d98a;--font:"Spectral",Georgia,serif}
-@media(prefers-color-scheme:dark){:root{--bg:#10151a;--page:#182027;--ink:#dce1d8;--muted:#93a1a6;--accent:#8db7de;--rule:#2b353b;--mark:#6b5a1d}}
+:root{--bg:#dfe4da;--page:#f2f4ee;--ink:#1d2a33;--muted:#5b6b73;--accent:#1f4e79;--rule:#c3cabd;--mark:#f0d98a;--warn:#b3402f;--font:"Spectral",Georgia,serif}
+@media(prefers-color-scheme:dark){:root{--bg:#10151a;--page:#182027;--ink:#dce1d8;--muted:#93a1a6;--accent:#8db7de;--rule:#2b353b;--mark:#6b5a1d;--warn:#e58b7a}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.65 var(--font)}
 button,input,textarea{font:inherit;color:inherit}
@@ -19,7 +19,7 @@ header{display:flex;gap:1rem;align-items:center;padding:1rem 1.5rem;border-botto
 header h1{margin:0;margin-right:auto;font-weight:300;font-size:1.7rem;line-height:1.2}
 header h1 small{display:block;font-size:.85rem;font-style:italic;color:var(--muted)}
 #saving{font-style:italic;color:var(--muted);font-size:.9rem}
-input[type=search],input[type=text],input[type=password],textarea{width:100%;background:var(--page);border:1px solid var(--rule);border-radius:3px;padding:.45rem .6rem}
+input[type=search],input[type=text],input[type=password],input[type=number],textarea{width:100%;background:var(--page);border:1px solid var(--rule);border-radius:3px;padding:.45rem .6rem}
 .btn{background:var(--accent);color:var(--page);border:1px solid var(--accent);border-radius:3px;padding:.4rem .9rem}
 .btn.ghost{background:none;color:var(--accent)}
 .btn:disabled{opacity:.5;cursor:default}
@@ -32,11 +32,16 @@ article{background:var(--page);padding:2rem clamp(1rem,4vw,3rem) 4rem}
 .wrap{max-width:52rem;margin:0 auto}
 article h2{margin:0 0 .3rem;font-weight:300;font-size:2.3rem;line-height:1.2}
 .meta{margin-bottom:1rem;font-style:italic;color:var(--muted)}
-.pg{display:grid;grid-template-columns:8rem 1fr;gap:1.5rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.pg{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)}
 .pg aside{font-size:.9rem;color:var(--muted)}
-.pg aside em{display:block}
+.pg aside>*{display:block;margin-bottom:.15rem}
+.pg aside em{font-size:1rem}
 .pg aside button{padding:0;border:0;background:none;color:var(--accent);text-align:left;text-decoration:underline;text-underline-offset:3px}
 .pg p{margin:0 0 1em;white-space:pre-line}
+.warn{color:var(--warn);font-size:.85rem}
+.unk{background:var(--warn);color:var(--page);border-radius:3px;padding:0 .35em;font-size:.85em;font-style:normal;white-space:nowrap}
+.alt{margin-top:.6rem;padding:.5rem .8rem;border:1px dashed var(--warn);border-radius:3px;font-size:.95rem}
+.alt summary{cursor:pointer;color:var(--warn)}
 mark{background:var(--mark);color:inherit}
 .back{display:none;margin-bottom:1rem}
 label{display:block;font-size:.9rem;color:var(--muted)}
@@ -48,20 +53,22 @@ dialog::backdrop{background:rgba(10,14,18,.72)}
 #lb .fig{max-height:78vh;overflow:auto}
 #lb img{display:block;max-width:100%;max-height:76vh;margin:auto;cursor:zoom-in}
 #lb img.z{max-width:none;max-height:none;width:180%;cursor:zoom-out}
-.bar{display:flex;gap:.8rem;align-items:center;margin-top:.6rem}
-.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.8rem}
-.row{display:grid;grid-template-columns:150px 1fr;gap:1rem;padding:1rem 0;border-top:1px solid var(--rule)}
-.row img{width:100%;border:1px solid var(--rule);cursor:zoom-in}
-.row textarea{min-height:11rem;resize:vertical}
 #cam{padding:.6rem;width:min(900px,96vw)}
 #cam video{display:block;width:100%;max-height:74vh;background:#000;transition:opacity .08s}
+.bar{display:flex;gap:.8rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
+.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.8rem}
+.row{display:grid;grid-template-columns:150px 1fr;gap:1rem;padding:1rem 0;border-top:1px solid var(--rule)}
+.row>div:first-child img{width:100%;border:1px solid var(--rule);cursor:zoom-in}
+.row textarea{min-height:11rem;resize:vertical;margin-top:.5rem}
+.altbox{margin-top:.8rem;padding:.7rem;border:1px dashed var(--warn);border-radius:3px}
+.altbox textarea{min-height:7rem}
 #toast{display:none;position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);max-width:92vw;padding:.6rem 1rem;border-radius:3px;background:var(--ink);color:var(--page);z-index:99}
 @media(max-width:800px){
  .layout{grid-template-columns:1fr}
  body.reading nav,body:not(.reading) article{display:none}
  .back{display:inline-block}
  .pg{grid-template-columns:1fr;gap:.3rem}
- .pg aside{display:flex;gap:1rem}
+ .pg aside{display:flex;gap:.2rem 1rem;flex-wrap:wrap}
  .fields,.row{grid-template-columns:1fr}
 }
 </style>
@@ -89,7 +96,7 @@ dialog::backdrop{background:rgba(10,14,18,.72)}
  <form id="loginf">
   <label for="pin">PIN pro přidávání a úpravy zápisů</label>
   <input id="pin" type="password" autocomplete="current-password" required>
-  <p id="loginerr" role="alert" style="color:#b3402f;min-height:1.5em;margin:.4rem 0"></p>
+  <p id="loginerr" role="alert" style="color:var(--warn);min-height:1.5em;margin:.4rem 0"></p>
   <div class="bar"><button class="btn">Přihlásit</button><button type="button" class="btn ghost" onclick="this.closest('dialog').close()">Zrušit</button></div>
  </form>
 </dialog>
@@ -107,6 +114,7 @@ dialog::backdrop{background:rgba(10,14,18,.72)}
  <div id="rows"></div>
  <div class="bar"><button class="btn" id="save">Uložit a zveřejnit</button><button class="btn ghost" onclick="this.closest('dialog').close()">Zavřít</button></div>
 </dialog>
+
 <dialog id="cam">
  <video autoplay playsinline muted></video>
  <div class="bar">
@@ -128,6 +136,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const state = { entries: [], id: null, query: "", token: null, exp: 0 };
 const fold = s => s.split("").map(c => ((c.normalize("NFD")[0] || c).toLowerCase()[0] || c)).join("");
 const sortEntries = () => state.entries.sort((a, b) => (a.date || "~").localeCompare(b.date || "~"));
+const UNK = /icantreadthis/gi;                       // značka, kterou AI píše, když něčemu nerozumí
+const unkCount = t => (String(t).match(UNK) || []).length;
+const firstNum = t => { const m = String(t).match(/\d{1,5}/); return m ? parseInt(m[0], 10) : null; };
+const label = (p, i) => p.page ?? i + 1;             // číslo strany = první číslo v přepisu (lze ručně opravit)
 let saving = 0;
 
 function h(tag, props = {}, ...kids) {
@@ -144,13 +156,21 @@ function h(tag, props = {}, ...kids) {
 }
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.style.display = "block";
-  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", 6000);
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", 7000);
 }
 function hl(text, q) {
   if (!q) return [text];
   const f = fold(text), n = fold(q), out = []; let i = 0, j;
   while ((j = f.indexOf(n, i)) >= 0) { out.push(text.slice(i, j), h("mark", {}, text.slice(j, j + n.length))); i = j + n.length; }
   out.push(text.slice(i)); return out;
+}
+function renderText(t, q) { // text s vyznačenými nečitelnými místy
+  const out = []; let i = 0;
+  for (const m of t.matchAll(UNK)) {
+    out.push(...hl(t.slice(i, m.index), q), h("span", { class: "unk", title: "AI tomuto místu nerozuměla. Má se na něj podívat člověk." }, "⚠ nečitelné"));
+    i = m.index + m[0].length;
+  }
+  out.push(...hl(t.slice(i), q)); return out;
 }
 
 /* ---------- Čtení (okamžité načtení z mezipaměti, na pozadí aktualizace) ---------- */
@@ -181,13 +201,16 @@ function route() {
 function renderList() {
   const q = state.query.trim(), nav = $("#list"); nav.replaceChildren();
   const items = state.entries.map(e => {
-    const hay = fold([e.title, e.place, ...e.pages.map(p => p.text)].join("\n"));
+    const hay = fold([e.title, e.place, ...e.pages.flatMap(p => [p.text, p.alt?.text || ""])].join("\n"));
     return { e, n: q ? hay.split(fold(q)).length - 1 : 0 };
   }).filter(x => !q || x.n);
   if (!items.length) nav.append(h("p", { style: "padding:0 1.5rem;color:var(--muted)" },
     state.entries.length ? "Nic nenalezeno." : "Zatím tu nejsou žádné zápisy. Přidej první tlačítkem nahoře."));
-  for (const { e, n } of items) nav.append(h("a", { href: "#" + encodeURIComponent(e.id), "aria-current": e.id === state.id ? "page" : null },
-    e.title, h("span", {}, [e.date, e.place].filter(Boolean).join(", ") + (q ? ` (shod: ${n})` : ""))));
+  for (const { e, n } of items) {
+    const ok = e.pages.every(p => p.verified), review = e.pages.some(p => p.alt || unkCount(p.text));
+    nav.append(h("a", { href: "#" + encodeURIComponent(e.id), "aria-current": e.id === state.id ? "page" : null },
+      e.title, h("span", {}, (ok ? "🟩 " : "🟥 ") + (review ? "⚠ " : "") + [e.date, e.place].filter(Boolean).join(", ") + (q ? ` (shod: ${n})` : ""))));
+  }
 }
 function renderReader() {
   const r = $("#reader"); r.replaceChildren();
@@ -199,9 +222,22 @@ function renderReader() {
     h("h2", {}, e.title),
     h("div", { class: "meta" }, [e.date, e.place].filter(Boolean).join(", "), e.pending ? " (zveřejňuje se…)" : ""),
     h("button", { class: "btn ghost", onclick: () => requestEdit(e) }, "Upravit zápis"));
-  e.pages.forEach((p, i) => w.append(h("section", { class: "pg" },
-    h("aside", {}, h("em", {}, `Strana ${i + 1}`), h("button", { onclick: () => openPhoto(e, i) }, "Podívat se na fotku")),
-    h("div", {}, p.text.split(/\n{2,}/).filter(Boolean).map(t => h("p", {}, ...hl(t, q)))))));
+  e.pages.forEach((p, i) => {
+    const n = unkCount(p.text);
+    w.append(h("section", { class: "pg" },
+      h("aside", {},
+        h("em", {}, `Strana ${label(p, i)}`),
+        h("span", {}, p.verified ? "🟩 Ověřeno člověkem" : "🟥 Přepsáno AI"),
+        n ? h("span", { class: "warn" }, `⚠ Nečitelná místa: ${n}`) : null,
+        p.alt ? h("span", { class: "warn" }, "⚠ Přepisy se liší") : null,
+        h("button", { onclick: () => openPhoto(e, i) }, "Podívat se na fotku")),
+      h("div", {},
+        p.text.split(/\n{2,}/).filter(Boolean).map(t => h("p", {}, ...renderText(t, q))),
+        p.alt ? h("details", { class: "alt" }, h("summary", {}, "Přepisy se liší, zobrazit druhý přepis"),
+          p.note ? h("p", { class: "meta" }, p.note) : null,
+          h("small", {}, `Druhý přepis (${p.alt.model || "jiný model"}):`),
+          ...p.alt.text.split(/\n{2,}/).filter(Boolean).map(t => h("p", {}, ...renderText(t, q)))) : null)));
+  });
   r.append(w);
   if (renderReader.last !== state.id) { window.scrollTo(0, 0); renderReader.last = state.id; }
 }
@@ -214,9 +250,9 @@ function openPhoto(e, i) { lbS = { e, i }; showPhoto(); if (!$("#lb").open) $("#
 function showPhoto() {
   const { e, i } = lbS, img = $("#lb img");
   img.classList.remove("z"); img.src = e.pages[i].image;
-  $("#lb .cap").textContent = `${e.title}, strana ${i + 1} z ${e.pages.length}`;
+  $("#lb .cap").textContent = `${e.title}, strana ${label(e.pages[i], i)}`;
   $("#prev").hidden = $("#next").hidden = e.pages.length < 2;
-  if (e.pages[i + 1]) new Image().src = e.pages[i + 1].image; // předtažení další strany
+  if (e.pages[i + 1]) new Image().src = e.pages[i + 1].image;
 }
 const step = d => { const n = lbS.i + d; if (n >= 0 && n < lbS.e.pages.length) { lbS.i = n; showPhoto(); } };
 $("#lb img").onclick = ev => ev.target.classList.toggle("z");
@@ -269,6 +305,7 @@ $("#add").onclick = async () => { if (!busy() && await ensureLogin()) openEditor
 const ed = { id: null, pages: [] };
 let uid = 0;
 const b64of = blob => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.onerror = no; r.readAsDataURL(blob); });
+const newPage = extra => ({ uid: ++uid, text: "", page: null, verified: false, alt: null, note: "", pageManual: false, statusText: "", ...extra });
 
 async function shrink(file, max = 2000) {
   const bmp = await createImageBitmap(file);
@@ -282,30 +319,74 @@ async function shrink(file, max = 2000) {
 }
 function openEditor(e) {
   ed.id = e ? e.id : null;
-  ed.pages = (e ? e.pages : []).map(p => ({ uid: ++uid, path: p.image, url: p.image, text: p.text }));
+  ed.pages = (e ? e.pages : []).map(p => newPage({
+    path: p.image, url: p.image, text: p.text, page: p.page ?? null, verified: !!p.verified,
+    alt: p.alt || null, note: p.note || "", pageManual: p.page != null,
+  }));
   $("#edh").textContent = e ? "Upravit zápis" : "Nový zápis";
   $("#f-title").value = e?.title || ""; $("#f-date").value = e?.date || ""; $("#f-place").value = e?.place || "";
   try { $("#f-ctx").value = localStorage.dennikCtx || ""; } catch {}
   drawRows(); $("#ed").showModal();
 }
 $("#f-ctx").oninput = ev => { try { localStorage.dennikCtx = ev.target.value; } catch {} };
-function drawRows() {
-  const box = $("#rows"); box.replaceChildren();
-  ed.pages.forEach((p, i) => {
-    p.status = h("small", { style: "color:var(--muted)" });
-    p.ta = h("textarea", { value: p.text, "aria-label": `Text strany ${i + 1}`, oninput: ev => p.text = ev.target.value });
-    p.btn = h("button", { class: "btn ghost", onclick: () => transcribe(p, true) }, "Přepsat AI");
-    p.img = h("img", { src: p.url, alt: `Strana ${i + 1}`, loading: "lazy", onclick: () => openPhoto({ title: "Náhled", pages: [{ image: p.url }] }, 0) });
-    box.append(h("div", { class: "row" },
-      h("div", {}, p.img, h("small", {}, `Strana ${i + 1}`)),
-      h("div", {}, p.ta, h("div", { class: "bar" }, p.btn,
-        h("button", { class: "btn ghost", onclick: () => { ed.pages = ed.pages.filter(x => x !== p); drawRows(); } }, "Odebrat"), p.status))));
-  });
+
+function setStatus(p, t) { p.statusText = t; if (p.status) p.status.textContent = t; }
+function setText(p, t) { // změna textu: přepočítá číslo strany a varování
+  p.text = t;
+  if (!p.pageManual) { p.page = firstNum(t); if (p.num) p.num.value = p.page ?? ""; }
+  updateWarn(p);
 }
+function updateWarn(p) {
+  if (!p.warn) return;
+  const n = unkCount(p.text); p.warn.replaceChildren();
+  if (n) p.warn.append(`⚠ Nečitelná místa: ${n} `, h("button", { class: "btn ghost", onclick: () => findUnk(p) }, "Najít další"));
+}
+function findUnk(p) {
+  const from = p.ta.selectionEnd || 0, len = "icantreadthis".length;
+  let m = /icantreadthis/i.exec(p.text.slice(from)), idx = m ? from + m.index : -1;
+  if (idx < 0 && (m = /icantreadthis/i.exec(p.text))) idx = m.index;
+  if (idx >= 0) { p.ta.focus(); p.ta.setSelectionRange(idx, idx + len); }
+}
+function buildRow(p, i) {
+  p.status = h("small", { style: "color:var(--muted)" }, p.statusText);
+  p.warn = h("small", { class: "warn" }); 
+  p.ta = h("textarea", { value: p.text, "aria-label": `Text fotky ${i + 1}`, oninput: ev => setText(p, ev.target.value) });
+  p.num = h("input", { type: "number", min: 0, max: 99999, value: p.page ?? "", style: "width:5.5rem", "aria-label": "Číslo strany",
+    oninput: ev => { p.pageManual = true; p.page = ev.target.value === "" ? null : parseInt(ev.target.value, 10); } });
+  p.btn = h("button", { class: "btn ghost", onclick: () => transcribe(p, true) }, "Přepsat AI");
+  p.img = h("img", { src: p.url, alt: `Foto ${i + 1}`, loading: "lazy", onclick: () => openPhoto({ title: "Náhled", pages: [{ image: p.url }] }, 0) });
+  const setV = v => {
+    if (v && (unkCount(p.text) || p.alt) && !confirm("Stále jsou tu nevyřešená místa nebo druhý přepis. Opravdu označit jako ověřené?")) return;
+    p.verified = v; refreshRow(p);
+  };
+  const row = h("div", { class: "row" },
+    h("div", {}, p.img, h("small", {}, `Foto ${i + 1}`)),
+    h("div", {},
+      h("div", { class: "bar", style: "margin-top:0" },
+        h("label", { style: "display:flex;gap:.4rem;align-items:center" }, "Číslo strany", p.num),
+        h("button", { class: "btn" + (p.verified ? "" : " ghost"), "aria-pressed": String(p.verified), onclick: () => setV(true) }, "🟩 Ověřeno člověkem"),
+        h("button", { class: "btn" + (p.verified ? " ghost" : ""), "aria-pressed": String(!p.verified), onclick: () => setV(false) }, "🟥 Přepsáno AI")),
+      p.ta, p.warn,
+      p.alt ? h("div", { class: "altbox" },
+        h("strong", { style: "color:var(--warn)" }, "⚠ Přepisy se liší, rozhodni, který platí"),
+        p.note ? h("p", { style: "margin:.3rem 0;font-size:.9rem" }, p.note) : null,
+        h("label", {}, `Druhý přepis (${p.alt.model || "jiný model"})`, h("textarea", { readonly: true, value: p.alt.text })),
+        h("div", { class: "bar" },
+          h("button", { class: "btn ghost", onclick: () => { setText(p, p.alt.text); p.alt = null; p.note = ""; refreshRow(p); } }, "Použít druhý přepis"),
+          h("button", { class: "btn ghost", onclick: () => { p.alt = null; p.note = ""; refreshRow(p); } }, "Ponechat hlavní a smazat druhý"))) : null,
+      h("div", { class: "bar" }, p.btn,
+        h("button", { class: "btn ghost", onclick: () => { if (confirm("Smazat tuto stránku ze zápisu?")) { ed.pages = ed.pages.filter(x => x !== p); drawRows(); } } }, "Smazat stránku"),
+        p.status)));
+  p.row = row; updateWarn(p);
+  return row;
+}
+function refreshRow(p) { const old = p.row; if (old && old.isConnected) old.replaceWith(buildRow(p, ed.pages.indexOf(p))); }
+function drawRows() { $("#rows").replaceChildren(...ed.pages.map((p, i) => buildRow(p, i))); }
+
 $("#pick").onclick = () => $("#f-files").click();
 function addFiles(files) {
   // Náhled je okamžitě z originálu, zmenšení běží na pozadí ve dvou vláknech.
-  const added = files.map(f => ({ uid: ++uid, file: f, url: URL.createObjectURL(f), text: "", b64: null }));
+  const added = files.map(f => newPage({ file: f, url: URL.createObjectURL(f), b64: null }));
   ed.pages.push(...added); drawRows();
   let k = 0;
   const worker = async () => {
@@ -316,7 +397,7 @@ function addFiles(files) {
         URL.revokeObjectURL(p.url); p.url = r.url; p.b64 = r.b64; p.file = null; p.img.src = p.url;
         enqueue(p);
       } catch {
-        toast(`Fotku ${p.file.name} se nepodařilo načíst (HEIC zkus převést na JPG).`);
+        toast(`Fotku ${p.file?.name || ""} se nepodařilo načíst (HEIC zkus převést na JPG).`);
         ed.pages = ed.pages.filter(x => x !== p); drawRows();
       }
     }
@@ -353,9 +434,9 @@ $("#snap").onclick = async () => {
 $("#camdone").onclick = () => $("#cam").close();
 $("#cam").onclose = () => { camStream?.getTracks().forEach(t => t.stop()); camStream = null; $("#cam video").srcObject = null; };
 
-// Fronta přepisu: 2 stránky souběžně, při limitu Gemini společná pauza a opakování.
+/* ---------- Přepis AI (Gemini + druhý model + kontrola shody) ---------- */
 const tq = []; let active = 0, coolUntil = 0;
-function enqueue(p) { p.status.textContent = "Čeká na AI…"; tq.push(p); pump(); }
+function enqueue(p) { setStatus(p, "Čeká na AI…"); tq.push(p); pump(); }
 function pump() {
   while (active < 2 && tq.length) {
     const wait = coolUntil - Date.now();
@@ -365,20 +446,24 @@ function pump() {
     active++;
     transcribe(p).then(r => {
       if (r === "rate" && (p.tries = (p.tries || 0) + 1) <= 3) {
-        coolUntil = Date.now() + 30000; p.status.textContent = "Limit Gemini, zkusím znovu za 30 s…"; tq.unshift(p);
+        coolUntil = Date.now() + 30000; setStatus(p, "Limit AI, zkusím znovu za 30 s…"); tq.unshift(p);
       }
     }).finally(() => { active--; pump(); });
   }
 }
 async function transcribe(p, manual) {
-  if (!p.b64 && !p.path) { p.status.textContent = "Fotka se ještě zpracovává…"; return; }
+  if (!p.b64 && !p.path) return setStatus(p, "Fotka se ještě zpracovává…");
   if (manual && p.text.trim() && !confirm("Přepíšu text této strany znovu. Tvoje úpravy zmizí. Pokračovat?")) return;
-  p.btn.disabled = true; p.status.textContent = "AI přepisuje…";
+  p.btn.disabled = true; setStatus(p, "AI přepisuje (2 modely)…");
   try {
     const image = p.b64 || await b64of(await (await fetch(p.path)).blob());
-    const { text } = await api("/transcribe", { image, mime: "image/jpeg", context: $("#f-ctx").value });
-    p.text = text; p.ta.value = text; p.status.textContent = "Přepsáno. Zkontroluj podle fotky.";
-  } catch (e) { p.status.textContent = e.message; return e.status === 429 ? "rate" : undefined; }
+    const res = await api("/transcribe", { image, mime: "image/jpeg", context: $("#f-ctx").value });
+    p.alt = res.alt || null; p.note = res.alt ? (res.note || "") : ""; p.verified = false;
+    p.statusText = res.check === "agree" ? "Oba modely se shodují. Zkontroluj podle fotky."
+      : res.check === "differ" ? "⚠ Modely se liší, rozhodni, který přepis platí."
+      : `Přepsal jen jeden model (${res.note})`;
+    setText(p, res.text); refreshRow(p);
+  } catch (e) { setStatus(p, e.message); return e.status === 429 ? "rate" : undefined; }
   finally { p.btn.disabled = false; }
 }
 
@@ -393,14 +478,15 @@ $("#save").onclick = () => {
   if (ed.pages.some(p => !p.b64 && !p.path)) return toast("Fotky se ještě zmenšují, chvilku vydrž.");
   if ((active || tq.length) && !confirm("AI ještě přepisuje některé stránky. Uložit i tak?")) return;
 
+  const meta = p => ({ text: p.text, page: p.page ?? null, verified: !!p.verified, alt: p.alt || null, note: p.note || "" });
   const payload = {
     id: ed.id, title, date: $("#f-date").value.trim(), place: $("#f-place").value.trim(),
-    pages: ed.pages.map(p => ({ text: p.text, ...(p.b64 ? { image: p.b64 } : { imagePath: p.path }) })),
+    pages: ed.pages.map(p => ({ ...meta(p), ...(p.b64 ? { image: p.b64 } : { imagePath: p.path }) })),
   };
   const prev = state.entries.find(e => e.id === ed.id);
   const local = {
     id: ed.id || "tmp-" + Date.now().toString(36), title, date: payload.date, place: payload.place, pending: true,
-    pages: ed.pages.map(p => ({ image: p.url, text: p.text })), // fotky zůstávají v paměti jako blob adresy
+    pages: ed.pages.map(p => ({ image: p.url, ...meta(p), alt: p.alt || undefined })),
   };
   const i = state.entries.findIndex(e => e.id === local.id);
   if (i >= 0) state.entries[i] = local; else state.entries.push(local);
@@ -427,7 +513,7 @@ async function saveInBackground(payload, local, prev) {
     $("#ed").showModal();
   } finally { setSaving(-1); }
 }
-async function waitForDeploy(d) { // čeká, až GitHub Pages zveřejní novou verzi, a pak vymění paměťové fotky za skutečné
+async function waitForDeploy(d) {
   for (let i = 0; i < 30; i++) {
     await sleep(10000);
     try {

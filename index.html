@@ -1,411 +1,701 @@
 <!doctype html>
 <html lang="cs">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deník z Afriky</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#dfe4da;--page:#f2f4ee;--ink:#1d2a33;--muted:#5b6b73;--accent:#1f4e79;--rule:#c3cabd;--mark:#f0d98a;--font:"Spectral",Georgia,serif}
-@media(prefers-color-scheme:dark){:root{--bg:#10151a;--page:#182027;--ink:#dce1d8;--muted:#93a1a6;--accent:#8db7de;--rule:#2b353b;--mark:#6b5a1d}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.65 var(--font)}
-button,input,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-header{display:flex;gap:1rem;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid var(--rule);flex-wrap:wrap}
-header h1{margin:0;margin-right:auto;font-weight:300;font-size:1.7rem;line-height:1.2}
-header h1 small{display:block;font-size:.85rem;font-style:italic;color:var(--muted)}
-#saving{font-style:italic;color:var(--muted);font-size:.9rem}
-input[type=search],input[type=text],input[type=password],textarea{width:100%;background:var(--page);border:1px solid var(--rule);border-radius:3px;padding:.45rem .6rem}
-.btn{background:var(--accent);color:var(--page);border:1px solid var(--accent);border-radius:3px;padding:.4rem .9rem}
-.btn.ghost{background:none;color:var(--accent)}
-.btn:disabled{opacity:.5;cursor:default}
-.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 90px)}
-nav{border-right:1px solid var(--rule);padding:1rem 0}
-nav a{display:block;padding:.55rem 1.5rem;color:inherit;text-decoration:none;border-left:3px solid transparent}
-nav a[aria-current]{border-color:var(--accent);background:var(--page)}
-nav a span{display:block;font-size:.85rem;font-style:italic;color:var(--muted)}
-article{background:var(--page);padding:2rem clamp(1rem,4vw,3rem) 4rem}
-.wrap{max-width:52rem;margin:0 auto}
-article h2{margin:0 0 .3rem;font-weight:300;font-size:2.3rem;line-height:1.2}
-.meta{margin-bottom:1rem;font-style:italic;color:var(--muted)}
-.pg{display:grid;grid-template-columns:8rem 1fr;gap:1.5rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)}
-.pg aside{font-size:.9rem;color:var(--muted)}
-.pg aside em{display:block}
-.pg aside button{padding:0;border:0;background:none;color:var(--accent);text-align:left;text-decoration:underline;text-underline-offset:3px}
-.pg p{margin:0 0 1em;white-space:pre-line}
-mark{background:var(--mark);color:inherit}
-.back{display:none;margin-bottom:1rem}
-label{display:block;font-size:.9rem;color:var(--muted)}
-dialog{max-width:96vw;padding:1.2rem;border:1px solid var(--rule);border-radius:4px;background:var(--page);color:var(--ink)}
-dialog::backdrop{background:rgba(10,14,18,.72)}
-#ed{width:min(1100px,96vw);max-height:94vh}
-#login{width:min(360px,96vw)}
-#lb{padding:.6rem}
-#lb .fig{max-height:78vh;overflow:auto}
-#lb img{display:block;max-width:100%;max-height:76vh;margin:auto;cursor:zoom-in}
-#lb img.z{max-width:none;max-height:none;width:180%;cursor:zoom-out}
-.bar{display:flex;gap:.8rem;align-items:center;margin-top:.6rem}
-.fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:.8rem}
-.row{display:grid;grid-template-columns:150px 1fr;gap:1rem;padding:1rem 0;border-top:1px solid var(--rule)}
-.row img{width:100%;border:1px solid var(--rule);cursor:zoom-in}
-.row textarea{min-height:11rem;resize:vertical}
-#toast{display:none;position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);max-width:92vw;padding:.6rem 1rem;border-radius:3px;background:var(--ink);color:var(--page);z-index:99}
-@media(max-width:800px){
- .layout{grid-template-columns:1fr}
- body.reading nav,body:not(.reading) article{display:none}
- .back{display:inline-block}
- .pg{grid-template-columns:1fr;gap:.3rem}
- .pg aside{display:flex;gap:1rem}
- .fields,.row{grid-template-columns:1fr}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deník z Afriky</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #dfe4da;
+      --page: #f2f4ee;
+      --ink: #1d2a33;
+      --muted: #5b6b73;
+      --accent: #1f4e79;
+      --rule: #c3cabd;
+      --mark: #f0d98a;
+      --font: "Spectral", Georgia, serif
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root {
+        --bg: #10151a;
+        --page: #182027;
+        --ink: #dce1d8;
+        --muted: #93a1a6;
+        --accent: #8db7de;
+        --rule: #2b353b;
+        --mark: #6b5a1d
+      }
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 18px/1.65 var(--font)
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+      color: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px
+    }
+
+    header {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap
+    }
+
+    header h1 {
+      margin: 0;
+      margin-right: auto;
+      font-weight: 300;
+      font-size: 1.7rem;
+      line-height: 1.2
+    }
+
+    header h1 small {
+      display: block;
+      font-size: .85rem;
+      font-style: italic;
+      color: var(--muted)
+    }
+
+    #saving {
+      font-style: italic;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    input[type=search],
+    input[type=text],
+    input[type=password],
+    textarea {
+      width: 100%;
+      background: var(--page);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: .45rem .6rem
+    }
+
+    .btn {
+      background: var(--accent);
+      color: var(--page);
+      border: 1px solid var(--accent);
+      border-radius: 3px;
+      padding: .4rem .9rem
+    }
+
+    .btn.ghost {
+      background: none;
+      color: var(--accent)
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: default
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: calc(100vh - 90px)
+    }
+
+    nav {
+      border-right: 1px solid var(--rule);
+      padding: 1rem 0
+    }
+
+    nav a {
+      display: block;
+      padding: .55rem 1.5rem;
+      color: inherit;
+      text-decoration: none;
+      border-left: 3px solid transparent
+    }
+
+    nav a[aria-current] {
+      border-color: var(--accent);
+      background: var(--page)
+    }
+
+    nav a span {
+      display: block;
+      font-size: .85rem;
+      font-style: italic;
+      color: var(--muted)
+    }
+
+    article {
+      background: var(--page);
+      padding: 2rem clamp(1rem, 4vw, 3rem) 4rem
+    }
+
+    .wrap {
+      max-width: 52rem;
+      margin: 0 auto
+    }
+
+    article h2 {
+      margin: 0 0 .3rem;
+      font-weight: 300;
+      font-size: 2.3rem;
+      line-height: 1.2
+    }
+
+    .meta {
+      margin-bottom: 1rem;
+      font-style: italic;
+      color: var(--muted)
+    }
+
+    .pg {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule)
+    }
+
+    .pg aside {
+      font-size: .9rem;
+      color: var(--muted)
+    }
+
+    .pg aside em {
+      display: block
+    }
+
+    .pg aside button {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--accent);
+      text-align: left;
+      text-decoration: underline;
+      text-underline-offset: 3px
+    }
+
+    .pg p {
+      margin: 0 0 1em;
+      white-space: pre-line
+    }
+
+    mark {
+      background: var(--mark);
+      color: inherit
+    }
+
+    .back {
+      display: none;
+      margin-bottom: 1rem
+    }
+
+    label {
+      display: block;
+      font-size: .9rem;
+      color: var(--muted)
+    }
+
+    dialog {
+      max-width: 96vw;
+      padding: 1.2rem;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      background: var(--page);
+      color: var(--ink)
+    }
+
+    dialog::backdrop {
+      background: rgba(10, 14, 18, .72)
+    }
+
+    #ed {
+      width: min(1100px, 96vw);
+      max-height: 94vh
+    }
+
+    #login {
+      width: min(360px, 96vw)
+    }
+
+    #lb {
+      padding: .6rem
+    }
+
+    #lb .fig {
+      max-height: 78vh;
+      overflow: auto
+    }
+
+    #lb img {
+      display: block;
+      max-width: 100%;
+      max-height: 76vh;
+      margin: auto;
+      cursor: zoom-in
+    }
+
+    #lb img.z {
+      max-width: none;
+      max-height: none;
+      width: 180%;
+      cursor: zoom-out
+    }
+
+    .bar {
+      display: flex;
+      gap: .8rem;
+      align-items: center;
+      margin-top: .6rem
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: .8rem
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--rule)
+    }
+
+    .row img {
+      width: 100%;
+      border: 1px solid var(--rule);
+      cursor: zoom-in
+    }
+
+    .row textarea {
+      min-height: 11rem;
+      resize: vertical
+    }
+
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 92vw;
+      padding: .6rem 1rem;
+      border-radius: 3px;
+      background: var(--ink);
+      color: var(--page);
+      z-index: 99
+    }
+
+    @media(max-width:800px) {
+      .layout {
+        grid-template-columns: 1fr
+      }
+
+      body.reading nav,
+      body:not(.reading) article {
+        display: none
+      }
+
+      .back {
+        display: inline-block
+      }
+
+      .pg {
+        grid-template-columns: 1fr;
+        gap: .3rem
+      }
+
+      .pg aside {
+        display: flex;
+        gap: 1rem
+      }
+
+      .fields,
+      .row {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header>
- <h1 id="title"></h1>
- <span id="saving" hidden>Ukládám na pozadí…</span>
- <input type="search" id="q" placeholder="Hledat v deníku…" aria-label="Hledat v deníku" style="max-width:260px">
- <button class="btn ghost" id="add">Přidat zápis</button>
-</header>
-<div class="layout"><nav id="list" aria-label="Zápisy"></nav><article id="reader"></article></div>
+  <header>
+    <h1 id="title"></h1>
+    <span id="saving" hidden>Ukládám na pozadí…</span>
+    <input type="search" id="q" placeholder="Hledat v deníku…" aria-label="Hledat v deníku" style="max-width:260px">
+    <button class="btn ghost" id="add">Přidat zápis</button>
+  </header>
+  <div class="layout">
+    <nav id="list" aria-label="Zápisy"></nav>
+    <article id="reader"></article>
+  </div>
 
-<dialog id="lb">
- <div class="fig"><img alt="Fotka stránky deníku"></div>
- <div class="bar">
-  <button class="btn ghost" id="prev" aria-label="Předchozí strana">‹</button>
-  <button class="btn ghost" id="next" aria-label="Další strana">›</button>
-  <span class="cap" style="margin-right:auto;color:var(--muted)"></span>
-  <button class="btn" id="lbclose">Zavřít</button>
- </div>
-</dialog>
+  <dialog id="lb">
+    <div class="fig"><img alt="Fotka stránky deníku"></div>
+    <div class="bar">
+      <button class="btn ghost" id="prev" aria-label="Předchozí strana">‹</button>
+      <button class="btn ghost" id="next" aria-label="Další strana">›</button>
+      <span class="cap" style="margin-right:auto;color:var(--muted)"></span>
+      <button class="btn" id="lbclose">Zavřít</button>
+    </div>
+  </dialog>
 
-<dialog id="login">
- <form id="loginf">
-  <label for="pin">PIN pro přidávání a úpravy zápisů</label>
-  <input id="pin" type="password" autocomplete="current-password" required>
-  <p id="loginerr" role="alert" style="color:#b3402f;min-height:1.5em;margin:.4rem 0"></p>
-  <div class="bar"><button class="btn">Přihlásit</button><button type="button" class="btn ghost" onclick="this.closest('dialog').close()">Zrušit</button></div>
- </form>
-</dialog>
+  <dialog id="login">
+    <form id="loginf">
+      <label for="pin">PIN pro přidávání a úpravy zápisů</label>
+      <input id="pin" type="password" autocomplete="current-password" required>
+      <p id="loginerr" role="alert" style="color:#b3402f;min-height:1.5em;margin:.4rem 0"></p>
+      <div class="bar"><button class="btn">Přihlásit</button><button type="button" class="btn ghost"
+          onclick="this.closest('dialog').close()">Zrušit</button></div>
+    </form>
+  </dialog>
 
-<dialog id="ed">
- <h3 id="edh" style="margin-top:0;font-weight:300;font-size:1.6rem"></h3>
- <div class="fields">
-  <label>Název<input id="f-title" type="text"></label>
-  <label>Datum (1923-05-14, nebo jen rok)<input id="f-date" type="text"></label>
-  <label>Místo<input id="f-place" type="text"></label>
- </div>
- <label style="margin-top:.8rem">Kontext pro AI (jazyk, rok, jména míst, kmenů a lidí)<textarea id="f-ctx" rows="2"></textarea></label>
- <p><button class="btn ghost" id="pick">Přidat fotky stránek</button><input id="f-files" type="file" accept="image/*" multiple hidden></p>
- <div id="rows"></div>
- <div class="bar"><button class="btn" id="save">Uložit a zveřejnit</button><button class="btn ghost" onclick="this.closest('dialog').close()">Zavřít</button></div>
-</dialog>
-<div id="toast" role="status"></div>
+  <dialog id="ed">
+    <h3 id="edh" style="margin-top:0;font-weight:300;font-size:1.6rem"></h3>
+    <div class="fields">
+      <label>Název<input id="f-title" type="text"></label>
+      <label>Datum (1923-05-14, nebo jen rok)<input id="f-date" type="text"></label>
+      <label>Místo<input id="f-place" type="text"></label>
+    </div>
+    <label style="margin-top:.8rem">Kontext pro AI (jazyk, rok, jména míst, kmenů a lidí)<textarea id="f-ctx"
+        rows="2"></textarea></label>
+    <p><button class="btn ghost" id="pick">Přidat fotky stránek</button><input id="f-files" type="file" accept="image/*"
+        multiple hidden></p>
+    <div id="rows"></div>
+    <div class="bar"><button class="btn" id="save">Uložit a zveřejnit</button><button class="btn ghost"
+        onclick="this.closest('dialog').close()">Zavřít</button></div>
+  </dialog>
+  <div id="toast" role="status"></div>
 
-<script>
-const CONFIG = {
-  workerUrl: "https://denik-worker.mirasekfrr-ef1.workers.dev",
-  title: "Deník z Afriky",
-  subtitle: "Zápisky misionáře přepsané z rukopisu",
-};
-const $ = s => document.querySelector(s);
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-const state = { entries: [], id: null, query: "", token: null, exp: 0 };
-const fold = s => s.split("").map(c => ((c.normalize("NFD")[0] || c).toLowerCase()[0] || c)).join("");
-const sortEntries = () => state.entries.sort((a, b) => (a.date || "~").localeCompare(b.date || "~"));
-let saving = 0;
+  <script>
+    const CONFIG = {
+      workerUrl: "https://denik-worker.mirasekfrr-ef1.workers.dev",
+      title: "Deník z Afriky",
+      subtitle: "Zápisky misionáře přepsané z rukopisu",
+    };
+    const $ = s => document.querySelector(s);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const state = { entries: [], id: null, query: "", token: null, exp: 0 };
+    const fold = s => s.split("").map(c => ((c.normalize("NFD")[0] || c).toLowerCase()[0] || c)).join("");
+    const sortEntries = () => state.entries.sort((a, b) => (a.date || "~").localeCompare(b.date || "~"));
+    let saving = 0;
 
-function h(tag, props = {}, ...kids) {
-  const el = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) {
-    if (k === "class") el.className = v;
-    else if (k === "value") el.value = v;
-    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
-    else if (v === true) el.setAttribute(k, "");
-    else if (v != null && v !== false) el.setAttribute(k, v);
-  }
-  for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid);
-  return el;
-}
-function toast(msg) {
-  const t = $("#toast"); t.textContent = msg; t.style.display = "block";
-  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", 6000);
-}
-function hl(text, q) {
-  if (!q) return [text];
-  const f = fold(text), n = fold(q), out = []; let i = 0, j;
-  while ((j = f.indexOf(n, i)) >= 0) { out.push(text.slice(i, j), h("mark", {}, text.slice(j, j + n.length))); i = j + n.length; }
-  out.push(text.slice(i)); return out;
-}
-
-/* ---------- Čtení (okamžité načtení z mezipaměti, na pozadí aktualizace) ---------- */
-const cacheSave = () => { try { localStorage.dennikData = JSON.stringify(state.entries); } catch {} };
-async function load() {
-  let shown = false;
-  try {
-    const c = JSON.parse(localStorage.dennikData || "null");
-    if (Array.isArray(c) && c.length) { state.entries = c; route(); shown = true; }
-  } catch {}
-  try {
-    const r = await fetch("data/diary.json?t=" + Date.now());
-    if (r.ok) {
-      const e = (await r.json()).entries || [];
-      if (!shown || JSON.stringify(e) !== JSON.stringify(state.entries)) { state.entries = e; cacheSave(); route(); shown = true; }
+    function h(tag, props = {}, ...kids) {
+      const el = document.createElement(tag);
+      for (const [k, v] of Object.entries(props)) {
+        if (k === "class") el.className = v;
+        else if (k === "value") el.value = v;
+        else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+        else if (v === true) el.setAttribute(k, "");
+        else if (v != null && v !== false) el.setAttribute(k, v);
+      }
+      for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid);
+      return el;
     }
-  } catch {}
-  if (!shown) route();
-}
-function route() {
-  const wide = matchMedia("(min-width:801px)").matches;
-  let id = decodeURIComponent(location.hash.slice(1));
-  if (!state.entries.some(e => e.id === id)) id = wide && state.entries[0] ? state.entries[0].id : null;
-  state.id = id;
-  document.body.classList.toggle("reading", !!id);
-  renderList(); renderReader();
-}
-function renderList() {
-  const q = state.query.trim(), nav = $("#list"); nav.replaceChildren();
-  const items = state.entries.map(e => {
-    const hay = fold([e.title, e.place, ...e.pages.map(p => p.text)].join("\n"));
-    return { e, n: q ? hay.split(fold(q)).length - 1 : 0 };
-  }).filter(x => !q || x.n);
-  if (!items.length) nav.append(h("p", { style: "padding:0 1.5rem;color:var(--muted)" },
-    state.entries.length ? "Nic nenalezeno." : "Zatím tu nejsou žádné zápisy. Přidej první tlačítkem nahoře."));
-  for (const { e, n } of items) nav.append(h("a", { href: "#" + encodeURIComponent(e.id), "aria-current": e.id === state.id ? "page" : null },
-    e.title, h("span", {}, [e.date, e.place].filter(Boolean).join(", ") + (q ? ` (shod: ${n})` : ""))));
-}
-function renderReader() {
-  const r = $("#reader"); r.replaceChildren();
-  const e = state.entries.find(x => x.id === state.id);
-  if (!e) { r.append(h("div", { class: "wrap" }, h("p", { class: "meta" }, "Vyber zápis vlevo, nebo hledej v textu deníku."))); return; }
-  const q = state.query.trim();
-  const w = h("div", { class: "wrap" },
-    h("a", { class: "back", href: "#" }, "← Všechny zápisy"),
-    h("h2", {}, e.title),
-    h("div", { class: "meta" }, [e.date, e.place].filter(Boolean).join(", "), e.pending ? " (zveřejňuje se…)" : ""),
-    h("button", { class: "btn ghost", onclick: () => requestEdit(e) }, "Upravit zápis"));
-  e.pages.forEach((p, i) => w.append(h("section", { class: "pg" },
-    h("aside", {}, h("em", {}, `Strana ${i + 1}`), h("button", { onclick: () => openPhoto(e, i) }, "Podívat se na fotku")),
-    h("div", {}, p.text.split(/\n{2,}/).filter(Boolean).map(t => h("p", {}, ...hl(t, q)))))));
-  r.append(w);
-  if (renderReader.last !== state.id) { window.scrollTo(0, 0); renderReader.last = state.id; }
-}
-$("#q").oninput = ev => { state.query = ev.target.value; renderList(); renderReader(); };
-addEventListener("hashchange", route);
+    function toast(msg) {
+      const t = $("#toast"); t.textContent = msg; t.style.display = "block";
+      clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", 6000);
+    }
+    function hl(text, q) {
+      if (!q) return [text];
+      const f = fold(text), n = fold(q), out = []; let i = 0, j;
+      while ((j = f.indexOf(n, i)) >= 0) { out.push(text.slice(i, j), h("mark", {}, text.slice(j, j + n.length))); i = j + n.length; }
+      out.push(text.slice(i)); return out;
+    }
 
-/* ---------- Fotka stránky ---------- */
-let lbS = { e: null, i: 0 };
-function openPhoto(e, i) { lbS = { e, i }; showPhoto(); if (!$("#lb").open) $("#lb").showModal(); }
-function showPhoto() {
-  const { e, i } = lbS, img = $("#lb img");
-  img.classList.remove("z"); img.src = e.pages[i].image;
-  $("#lb .cap").textContent = `${e.title}, strana ${i + 1} z ${e.pages.length}`;
-  $("#prev").hidden = $("#next").hidden = e.pages.length < 2;
-  if (e.pages[i + 1]) new Image().src = e.pages[i + 1].image; // předtažení další strany
-}
-const step = d => { const n = lbS.i + d; if (n >= 0 && n < lbS.e.pages.length) { lbS.i = n; showPhoto(); } };
-$("#lb img").onclick = ev => ev.target.classList.toggle("z");
-$("#prev").onclick = () => step(-1); $("#next").onclick = () => step(1);
-$("#lbclose").onclick = () => $("#lb").close();
-$("#lb").addEventListener("keydown", ev => { if (ev.key === "ArrowLeft") step(-1); if (ev.key === "ArrowRight") step(1); });
-
-/* ---------- API a přihlášení ---------- */
-let loginRes = null;
-function ensureLogin() {
-  if (state.token && Date.now() < state.exp) return Promise.resolve(true);
-  return new Promise(res => { loginRes = res; $("#login").showModal(); $("#pin").focus(); });
-}
-async function api(path, body, retry = true) {
-  let r;
-  try {
-    r = await fetch(CONFIG.workerUrl + path, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...(state.token ? { Authorization: "Bearer " + state.token } : {}) },
-      body: JSON.stringify(body),
-    });
-  } catch { throw new Error("Nepodařilo se spojit s Workerem."); }
-  const d = await r.json().catch(() => ({}));
-  if (r.status === 401 && path !== "/login" && retry) {
-    state.token = null;
-    if (await ensureLogin()) return api(path, body, false);
-  }
-  if (!r.ok) throw Object.assign(new Error(d.error || `Chyba ${r.status}`), { status: r.status });
-  return d;
-}
-$("#loginf").onsubmit = async ev => {
-  ev.preventDefault(); $("#loginerr").textContent = "";
-  try {
-    const d = await api("/login", { pin: $("#pin").value });
-    state.token = d.token; state.exp = d.expires; $("#pin").value = "";
-    const res = loginRes; loginRes = null; $("#login").close(); res && res(true);
-  } catch (e) { $("#loginerr").textContent = e.message; }
-};
-$("#login").onclose = () => { if (loginRes) { loginRes(false); loginRes = null; } };
-
-function busy() { if (saving) { toast("Počkej, ještě se ukládá předchozí zápis."); return true; } }
-async function requestEdit(e) {
-  if (busy()) return;
-  if (e.pending) return toast("Zápis se ještě zveřejňuje. Zkus to za minutu.");
-  if (await ensureLogin()) openEditor(e);
-}
-$("#add").onclick = async () => { if (!busy() && await ensureLogin()) openEditor(null); };
-
-/* ---------- Editor ---------- */
-const ed = { id: null, pages: [] };
-let uid = 0;
-const b64of = blob => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.onerror = no; r.readAsDataURL(blob); });
-
-async function shrink(file, max = 2000) {
-  const bmp = await createImageBitmap(file);
-  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
-  const c = document.createElement("canvas");
-  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
-  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-  bmp.close && bmp.close();
-  const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
-  return { b64: await b64of(blob), url: URL.createObjectURL(blob) };
-}
-function openEditor(e) {
-  ed.id = e ? e.id : null;
-  ed.pages = (e ? e.pages : []).map(p => ({ uid: ++uid, path: p.image, url: p.image, text: p.text }));
-  $("#edh").textContent = e ? "Upravit zápis" : "Nový zápis";
-  $("#f-title").value = e?.title || ""; $("#f-date").value = e?.date || ""; $("#f-place").value = e?.place || "";
-  try { $("#f-ctx").value = localStorage.dennikCtx || ""; } catch {}
-  drawRows(); $("#ed").showModal();
-}
-$("#f-ctx").oninput = ev => { try { localStorage.dennikCtx = ev.target.value; } catch {} };
-function drawRows() {
-  const box = $("#rows"); box.replaceChildren();
-  ed.pages.forEach((p, i) => {
-    p.status = h("small", { style: "color:var(--muted)" });
-    p.ta = h("textarea", { value: p.text, "aria-label": `Text strany ${i + 1}`, oninput: ev => p.text = ev.target.value });
-    p.btn = h("button", { class: "btn ghost", onclick: () => transcribe(p, true) }, "Přepsat AI");
-    p.img = h("img", { src: p.url, alt: `Strana ${i + 1}`, loading: "lazy", onclick: () => openPhoto({ title: "Náhled", pages: [{ image: p.url }] }, 0) });
-    box.append(h("div", { class: "row" },
-      h("div", {}, p.img, h("small", {}, `Strana ${i + 1}`)),
-      h("div", {}, p.ta, h("div", { class: "bar" }, p.btn,
-        h("button", { class: "btn ghost", onclick: () => { ed.pages = ed.pages.filter(x => x !== p); drawRows(); } }, "Odebrat"), p.status))));
-  });
-}
-$("#pick").onclick = () => $("#f-files").click();
-$("#f-files").onchange = ev => {
-  const files = [...ev.target.files].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-  ev.target.value = "";
-  // Náhled je okamžitě z originálu, zmenšení běží na pozadí ve dvou vláknech.
-  const added = files.map(f => ({ uid: ++uid, file: f, url: URL.createObjectURL(f), text: "", b64: null }));
-  ed.pages.push(...added); drawRows();
-  let k = 0;
-  const worker = async () => {
-    while (k < added.length) {
-      const p = added[k++];
+    /* ---------- Čtení (okamžité načtení z mezipaměti, na pozadí aktualizace) ---------- */
+    const cacheSave = () => { try { localStorage.dennikData = JSON.stringify(state.entries); } catch { } };
+    async function load() {
+      let shown = false;
       try {
-        const r = await shrink(p.file);
-        URL.revokeObjectURL(p.url); p.url = r.url; p.b64 = r.b64; p.file = null; p.img.src = p.url;
-        enqueue(p);
-      } catch {
-        toast(`Fotku ${p.file.name} se nepodařilo načíst (HEIC zkus převést na JPG).`);
-        ed.pages = ed.pages.filter(x => x !== p); drawRows();
+        const c = JSON.parse(localStorage.dennikData || "null");
+        if (Array.isArray(c) && c.length) { state.entries = c; route(); shown = true; }
+      } catch { }
+      try {
+        const r = await fetch("data/diary.json?t=" + Date.now());
+        if (r.ok) {
+          const e = (await r.json()).entries || [];
+          if (!shown || JSON.stringify(e) !== JSON.stringify(state.entries)) { state.entries = e; cacheSave(); route(); shown = true; }
+        }
+      } catch { }
+      if (!shown) route();
+    }
+    function route() {
+      const wide = matchMedia("(min-width:801px)").matches;
+      let id = decodeURIComponent(location.hash.slice(1));
+      if (!state.entries.some(e => e.id === id)) id = wide && state.entries[0] ? state.entries[0].id : null;
+      state.id = id;
+      document.body.classList.toggle("reading", !!id);
+      renderList(); renderReader();
+    }
+    function renderList() {
+      const q = state.query.trim(), nav = $("#list"); nav.replaceChildren();
+      const items = state.entries.map(e => {
+        const hay = fold([e.title, e.place, ...e.pages.map(p => p.text)].join("\n"));
+        return { e, n: q ? hay.split(fold(q)).length - 1 : 0 };
+      }).filter(x => !q || x.n);
+      if (!items.length) nav.append(h("p", { style: "padding:0 1.5rem;color:var(--muted)" },
+        state.entries.length ? "Nic nenalezeno." : "Zatím tu nejsou žádné zápisy. Přidej první tlačítkem nahoře."));
+      for (const { e, n } of items) nav.append(h("a", { href: "#" + encodeURIComponent(e.id), "aria-current": e.id === state.id ? "page" : null },
+        e.title, h("span", {}, [e.date, e.place].filter(Boolean).join(", ") + (q ? ` (shod: ${n})` : ""))));
+    }
+    function renderReader() {
+      const r = $("#reader"); r.replaceChildren();
+      const e = state.entries.find(x => x.id === state.id);
+      if (!e) { r.append(h("div", { class: "wrap" }, h("p", { class: "meta" }, "Vyber zápis vlevo, nebo hledej v textu deníku."))); return; }
+      const q = state.query.trim();
+      const w = h("div", { class: "wrap" },
+        h("a", { class: "back", href: "#" }, "← Všechny zápisy"),
+        h("h2", {}, e.title),
+        h("div", { class: "meta" }, [e.date, e.place].filter(Boolean).join(", "), e.pending ? " (zveřejňuje se…)" : ""),
+        h("button", { class: "btn ghost", onclick: () => requestEdit(e) }, "Upravit zápis"));
+      e.pages.forEach((p, i) => w.append(h("section", { class: "pg" },
+        h("aside", {}, h("em", {}, `Strana ${i + 1}`), h("button", { onclick: () => openPhoto(e, i) }, "Podívat se na fotku")),
+        h("div", {}, p.text.split(/\n{2,}/).filter(Boolean).map(t => h("p", {}, ...hl(t, q)))))));
+      r.append(w);
+      if (renderReader.last !== state.id) { window.scrollTo(0, 0); renderReader.last = state.id; }
+    }
+    $("#q").oninput = ev => { state.query = ev.target.value; renderList(); renderReader(); };
+    addEventListener("hashchange", route);
+
+    /* ---------- Fotka stránky ---------- */
+    let lbS = { e: null, i: 0 };
+    function openPhoto(e, i) { lbS = { e, i }; showPhoto(); if (!$("#lb").open) $("#lb").showModal(); }
+    function showPhoto() {
+      const { e, i } = lbS, img = $("#lb img");
+      img.classList.remove("z"); img.src = e.pages[i].image;
+      $("#lb .cap").textContent = `${e.title}, strana ${i + 1} z ${e.pages.length}`;
+      $("#prev").hidden = $("#next").hidden = e.pages.length < 2;
+      if (e.pages[i + 1]) new Image().src = e.pages[i + 1].image; // předtažení další strany
+    }
+    const step = d => { const n = lbS.i + d; if (n >= 0 && n < lbS.e.pages.length) { lbS.i = n; showPhoto(); } };
+    $("#lb img").onclick = ev => ev.target.classList.toggle("z");
+    $("#prev").onclick = () => step(-1); $("#next").onclick = () => step(1);
+    $("#lbclose").onclick = () => $("#lb").close();
+    $("#lb").addEventListener("keydown", ev => { if (ev.key === "ArrowLeft") step(-1); if (ev.key === "ArrowRight") step(1); });
+
+    /* ---------- API a přihlášení ---------- */
+    let loginRes = null;
+    function ensureLogin() {
+      if (state.token && Date.now() < state.exp) return Promise.resolve(true);
+      return new Promise(res => { loginRes = res; $("#login").showModal(); $("#pin").focus(); });
+    }
+    async function api(path, body, retry = true) {
+      let r;
+      try {
+        r = await fetch(CONFIG.workerUrl + path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...(state.token ? { Authorization: "Bearer " + state.token } : {}) },
+          body: JSON.stringify(body),
+        });
+      } catch { throw new Error("Nepodařilo se spojit s Workerem."); }
+      const d = await r.json().catch(() => ({}));
+      if (r.status === 401 && path !== "/login" && retry) {
+        state.token = null;
+        if (await ensureLogin()) return api(path, body, false);
+      }
+      if (!r.ok) throw Object.assign(new Error(d.error || `Chyba ${r.status}`), { status: r.status });
+      return d;
+    }
+    $("#loginf").onsubmit = async ev => {
+      ev.preventDefault(); $("#loginerr").textContent = "";
+      try {
+        const d = await api("/login", { pin: $("#pin").value });
+        state.token = d.token; state.exp = d.expires; $("#pin").value = "";
+        const res = loginRes; loginRes = null; $("#login").close(); res && res(true);
+      } catch (e) { $("#loginerr").textContent = e.message; }
+    };
+    $("#login").onclose = () => { if (loginRes) { loginRes(false); loginRes = null; } };
+
+    function busy() { if (saving) { toast("Počkej, ještě se ukládá předchozí zápis."); return true; } }
+    async function requestEdit(e) {
+      if (busy()) return;
+      if (e.pending) return toast("Zápis se ještě zveřejňuje. Zkus to za minutu.");
+      if (await ensureLogin()) openEditor(e);
+    }
+    $("#add").onclick = async () => { if (!busy() && await ensureLogin()) openEditor(null); };
+
+    /* ---------- Editor ---------- */
+    const ed = { id: null, pages: [] };
+    let uid = 0;
+    const b64of = blob => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.onerror = no; r.readAsDataURL(blob); });
+
+    async function shrink(file, max = 2000) {
+      const bmp = await createImageBitmap(file);
+      const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      bmp.close && bmp.close();
+      const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
+      return { b64: await b64of(blob), url: URL.createObjectURL(blob) };
+    }
+    function openEditor(e) {
+      ed.id = e ? e.id : null;
+      ed.pages = (e ? e.pages : []).map(p => ({ uid: ++uid, path: p.image, url: p.image, text: p.text }));
+      $("#edh").textContent = e ? "Upravit zápis" : "Nový zápis";
+      $("#f-title").value = e?.title || ""; $("#f-date").value = e?.date || ""; $("#f-place").value = e?.place || "";
+      try { $("#f-ctx").value = localStorage.dennikCtx || ""; } catch { }
+      drawRows(); $("#ed").showModal();
+    }
+    $("#f-ctx").oninput = ev => { try { localStorage.dennikCtx = ev.target.value; } catch { } };
+    function drawRows() {
+      const box = $("#rows"); box.replaceChildren();
+      ed.pages.forEach((p, i) => {
+        p.status = h("small", { style: "color:var(--muted)" });
+        p.ta = h("textarea", { value: p.text, "aria-label": `Text strany ${i + 1}`, oninput: ev => p.text = ev.target.value });
+        p.btn = h("button", { class: "btn ghost", onclick: () => transcribe(p, true) }, "Přepsat AI");
+        p.img = h("img", { src: p.url, alt: `Strana ${i + 1}`, loading: "lazy", onclick: () => openPhoto({ title: "Náhled", pages: [{ image: p.url }] }, 0) });
+        box.append(h("div", { class: "row" },
+          h("div", {}, p.img, h("small", {}, `Strana ${i + 1}`)),
+          h("div", {}, p.ta, h("div", { class: "bar" }, p.btn,
+            h("button", { class: "btn ghost", onclick: () => { ed.pages = ed.pages.filter(x => x !== p); drawRows(); } }, "Odebrat"), p.status))));
+      });
+    }
+    $("#pick").onclick = () => $("#f-files").click();
+    $("#f-files").onchange = ev => {
+      const files = [...ev.target.files].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+      ev.target.value = "";
+      // Náhled je okamžitě z originálu, zmenšení běží na pozadí ve dvou vláknech.
+      const added = files.map(f => ({ uid: ++uid, file: f, url: URL.createObjectURL(f), text: "", b64: null }));
+      ed.pages.push(...added); drawRows();
+      let k = 0;
+      const worker = async () => {
+        while (k < added.length) {
+          const p = added[k++];
+          try {
+            const r = await shrink(p.file);
+            URL.revokeObjectURL(p.url); p.url = r.url; p.b64 = r.b64; p.file = null; p.img.src = p.url;
+            enqueue(p);
+          } catch {
+            toast(`Fotku ${p.file.name} se nepodařilo načíst (HEIC zkus převést na JPG).`);
+            ed.pages = ed.pages.filter(x => x !== p); drawRows();
+          }
+        }
+      };
+      worker(); worker();
+    };
+
+    // Fronta přepisu: 2 stránky souběžně, při limitu Gemini společná pauza a opakování.
+    const tq = []; let active = 0, coolUntil = 0;
+    function enqueue(p) { p.status.textContent = "Čeká na AI…"; tq.push(p); pump(); }
+    function pump() {
+      while (active < 2 && tq.length) {
+        const wait = coolUntil - Date.now();
+        if (wait > 0) { clearTimeout(pump.t); pump.t = setTimeout(pump, wait); return; }
+        const p = tq.shift();
+        if (!ed.pages.includes(p)) continue;
+        active++;
+        transcribe(p).then(r => {
+          if (r === "rate" && (p.tries = (p.tries || 0) + 1) <= 3) {
+            coolUntil = Date.now() + 30000; p.status.textContent = "Limit Gemini, zkusím znovu za 30 s…"; tq.unshift(p);
+          }
+        }).finally(() => { active--; pump(); });
       }
     }
-  };
-  worker(); worker();
-};
-
-// Fronta přepisu: 2 stránky souběžně, při limitu Gemini společná pauza a opakování.
-const tq = []; let active = 0, coolUntil = 0;
-function enqueue(p) { p.status.textContent = "Čeká na AI…"; tq.push(p); pump(); }
-function pump() {
-  while (active < 2 && tq.length) {
-    const wait = coolUntil - Date.now();
-    if (wait > 0) { clearTimeout(pump.t); pump.t = setTimeout(pump, wait); return; }
-    const p = tq.shift();
-    if (!ed.pages.includes(p)) continue;
-    active++;
-    transcribe(p).then(r => {
-      if (r === "rate" && (p.tries = (p.tries || 0) + 1) <= 3) {
-        coolUntil = Date.now() + 30000; p.status.textContent = "Limit Gemini, zkusím znovu za 30 s…"; tq.unshift(p);
-      }
-    }).finally(() => { active--; pump(); });
-  }
-}
-async function transcribe(p, manual) {
-  if (!p.b64 && !p.path) { p.status.textContent = "Fotka se ještě zpracovává…"; return; }
-  if (manual && p.text.trim() && !confirm("Přepíšu text této strany znovu. Tvoje úpravy zmizí. Pokračovat?")) return;
-  p.btn.disabled = true; p.status.textContent = "AI přepisuje…";
-  try {
-    const image = p.b64 || await b64of(await (await fetch(p.path)).blob());
-    const { text } = await api("/transcribe", { image, mime: "image/jpeg", context: $("#f-ctx").value });
-    p.text = text; p.ta.value = text; p.status.textContent = "Přepsáno. Zkontroluj podle fotky.";
-  } catch (e) { p.status.textContent = e.message; return e.status === 429 ? "rate" : undefined; }
-  finally { p.btn.disabled = false; }
-}
-
-/* ---------- Ukládání na pozadí (zápis je vidět okamžitě z paměti prohlížeče) ---------- */
-function setSaving(n) { saving += n; $("#saving").hidden = !saving; }
-addEventListener("beforeunload", ev => { if (saving) { ev.preventDefault(); ev.returnValue = ""; } });
-
-$("#save").onclick = () => {
-  const title = $("#f-title").value.trim();
-  if (!title) return toast("Vyplň název zápisu.");
-  if (!ed.pages.length) return toast("Přidej alespoň jednu stránku.");
-  if (ed.pages.some(p => !p.b64 && !p.path)) return toast("Fotky se ještě zmenšují, chvilku vydrž.");
-  if ((active || tq.length) && !confirm("AI ještě přepisuje některé stránky. Uložit i tak?")) return;
-
-  const payload = {
-    id: ed.id, title, date: $("#f-date").value.trim(), place: $("#f-place").value.trim(),
-    pages: ed.pages.map(p => ({ text: p.text, ...(p.b64 ? { image: p.b64 } : { imagePath: p.path }) })),
-  };
-  const prev = state.entries.find(e => e.id === ed.id);
-  const local = {
-    id: ed.id || "tmp-" + Date.now().toString(36), title, date: payload.date, place: payload.place, pending: true,
-    pages: ed.pages.map(p => ({ image: p.url, text: p.text })), // fotky zůstávají v paměti jako blob adresy
-  };
-  const i = state.entries.findIndex(e => e.id === local.id);
-  if (i >= 0) state.entries[i] = local; else state.entries.push(local);
-  sortEntries();
-  $("#ed").close(); location.hash = "#" + encodeURIComponent(local.id); route();
-  saveInBackground(payload, local, prev);
-};
-async function saveInBackground(payload, local, prev) {
-  setSaving(1);
-  try {
-    const d = await api("/save", payload);
-    if (d.id !== local.id) {
-      const was = state.id === local.id; local.id = d.id;
-      if (was) { state.id = d.id; history.replaceState(null, "", "#" + encodeURIComponent(d.id)); }
-      renderList();
+    async function transcribe(p, manual) {
+      if (!p.b64 && !p.path) { p.status.textContent = "Fotka se ještě zpracovává…"; return; }
+      if (manual && p.text.trim() && !confirm("Přepíšu text této strany znovu. Tvoje úpravy zmizí. Pokračovat?")) return;
+      p.btn.disabled = true; p.status.textContent = "AI přepisuje…";
+      try {
+        const image = p.b64 || await b64of(await (await fetch(p.path)).blob());
+        const { text } = await api("/transcribe", { image, mime: "image/jpeg", context: $("#f-ctx").value });
+        p.text = text; p.ta.value = text; p.status.textContent = "Přepsáno. Zkontroluj podle fotky.";
+      } catch (e) { p.status.textContent = e.message; return e.status === 429 ? "rate" : undefined; }
+      finally { p.btn.disabled = false; }
     }
-    toast("Uloženo. Veřejně se zápis objeví po přebuildování webu (1 až 2 minuty).");
-    waitForDeploy(d);
-  } catch (e) {
-    state.entries = state.entries.filter(x => x !== local);
-    if (prev) state.entries.push(prev);
-    sortEntries(); route();
-    toast(`Uložení selhalo: ${e.message} Zápis je zpátky v editoru.`);
-    $("#ed").showModal();
-  } finally { setSaving(-1); }
-}
-async function waitForDeploy(d) { // čeká, až GitHub Pages zveřejní novou verzi, a pak vymění paměťové fotky za skutečné
-  for (let i = 0; i < 30; i++) {
-    await sleep(10000);
-    try {
-      const r = await fetch("data/diary.json?t=" + Date.now());
-      if (!r.ok) continue;
-      const entries = (await r.json()).entries || [];
-      const e = entries.find(x => x.id === d.id);
-      if (e && e.updated === d.updated) { state.entries = entries; cacheSave(); route(); return; }
-    } catch {}
-  }
-  toast("Zápis je uložený na GitHubu, web se ale ještě nepřebuildoval. Obnov stránku později.");
-}
 
-$("#title").append(CONFIG.title, h("small", {}, CONFIG.subtitle));
-document.title = CONFIG.title;
-load();
-</script>
+    /* ---------- Ukládání na pozadí (zápis je vidět okamžitě z paměti prohlížeče) ---------- */
+    function setSaving(n) { saving += n; $("#saving").hidden = !saving; }
+    addEventListener("beforeunload", ev => { if (saving) { ev.preventDefault(); ev.returnValue = ""; } });
+
+    $("#save").onclick = () => {
+      const title = $("#f-title").value.trim();
+      if (!title) return toast("Vyplň název zápisu.");
+      if (!ed.pages.length) return toast("Přidej alespoň jednu stránku.");
+      if (ed.pages.some(p => !p.b64 && !p.path)) return toast("Fotky se ještě zmenšují, chvilku vydrž.");
+      if ((active || tq.length) && !confirm("AI ještě přepisuje některé stránky. Uložit i tak?")) return;
+
+      const payload = {
+        id: ed.id, title, date: $("#f-date").value.trim(), place: $("#f-place").value.trim(),
+        pages: ed.pages.map(p => ({ text: p.text, ...(p.b64 ? { image: p.b64 } : { imagePath: p.path }) })),
+      };
+      const prev = state.entries.find(e => e.id === ed.id);
+      const local = {
+        id: ed.id || "tmp-" + Date.now().toString(36), title, date: payload.date, place: payload.place, pending: true,
+        pages: ed.pages.map(p => ({ image: p.url, text: p.text })), // fotky zůstávají v paměti jako blob adresy
+      };
+      const i = state.entries.findIndex(e => e.id === local.id);
+      if (i >= 0) state.entries[i] = local; else state.entries.push(local);
+      sortEntries();
+      $("#ed").close(); location.hash = "#" + encodeURIComponent(local.id); route();
+      saveInBackground(payload, local, prev);
+    };
+    async function saveInBackground(payload, local, prev) {
+      setSaving(1);
+      try {
+        const d = await api("/save", payload);
+        if (d.id !== local.id) {
+          const was = state.id === local.id; local.id = d.id;
+          if (was) { state.id = d.id; history.replaceState(null, "", "#" + encodeURIComponent(d.id)); }
+          renderList();
+        }
+        toast("Uloženo. Veřejně se zápis objeví po přebuildování webu (1 až 2 minuty).");
+        waitForDeploy(d);
+      } catch (e) {
+        state.entries = state.entries.filter(x => x !== local);
+        if (prev) state.entries.push(prev);
+        sortEntries(); route();
+        toast(`Uložení selhalo: ${e.message} Zápis je zpátky v editoru.`);
+        $("#ed").showModal();
+      } finally { setSaving(-1); }
+    }
+    async function waitForDeploy(d) { // čeká, až GitHub Pages zveřejní novou verzi, a pak vymění paměťové fotky za skutečné
+      for (let i = 0; i < 30; i++) {
+        await sleep(10000);
+        try {
+          const r = await fetch("data/diary.json?t=" + Date.now());
+          if (!r.ok) continue;
+          const entries = (await r.json()).entries || [];
+          const e = entries.find(x => x.id === d.id);
+          if (e && e.updated === d.updated) { state.entries = entries; cacheSave(); route(); return; }
+        } catch { }
+      }
+      toast("Zápis je uložený na GitHubu, web se ale ještě nepřebuildoval. Obnov stránku později.");
+    }
+
+    $("#title").append(CONFIG.title, h("small", {}, CONFIG.subtitle));
+    document.title = CONFIG.title;
+    load();
+  </script>
 </body>
+
 </html>
